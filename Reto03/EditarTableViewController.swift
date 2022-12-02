@@ -55,8 +55,8 @@ class EditarTableViewController: UITableViewController {
         var prio = editarPrioridadTextField.text ?? ""
         
         ti = ti.trimmingCharacters(in: .whitespacesAndNewlines)
-        ti = des.trimmingCharacters(in: .whitespacesAndNewlines)
-        ti = prio.trimmingCharacters(in: .whitespacesAndNewlines)
+        des = des.trimmingCharacters(in: .whitespacesAndNewlines)
+        prio = prio.trimmingCharacters(in: .whitespacesAndNewlines)
 
         
         if ti.isEmpty || des.isEmpty || prio.isEmpty {
