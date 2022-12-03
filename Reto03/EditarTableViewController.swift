@@ -10,25 +10,19 @@ import UIKit
 
 protocol EditarTableViewControllerDelegate{
     
-    func editarTableViewController(_ editarTableViewController: EditarTableViewController, didEditTarea tareaId: TareaId)
+    func editarTableViewController(_ editarTableViewController: EditarTableViewController, didEditTarea tareaWithID : TareaWithID)
     
-    func editarTableViewController(_ editarTableViewController:          EditarTableViewController, didDropTarea id: String?)
+    func editarTableViewController(_ editarTableViewController: EditarTableViewController, didDropTarea id: Int?)
 }
 
 class EditarTableViewController: UITableViewController {
 
     
     @IBOutlet weak var editarTituloTextField: UITextField!
-    
     @IBOutlet weak var editarDesTextField: UITextField!
-    
     @IBOutlet weak var editarPrioridadTextField: UITextField!
     
-    var valorTareaId :TareaId?
-    
-    
-    var ordenTarea :String?
-
+    var tareaWithID :TareaWithID?
     
     var delegate:EditarTableViewControllerDelegate?
 
@@ -36,7 +30,7 @@ class EditarTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let valorEntregado=valorTareaId?.tarea
+        let valorEntregado=tareaWithID?.tarea
         
         editarTituloTextField.text = valorEntregado?.titulo
         editarDesTextField.text = valorEntregado?.descripcion
@@ -60,15 +54,12 @@ class EditarTableViewController: UITableViewController {
 
         
         if ti.isEmpty || des.isEmpty || prio.isEmpty {
-            print("campos vacios")
-            dismiss(animated: true)
+            mostrarAlerta(titulo:"Editar" , mensaje: "tienes campos vacios")
         
         }else{
             let tareaMod = Tarea(titulo: ti, descripcion: des, prioridades:prio)
-            
-            let tareaId = TareaId(tarea: tareaMod, id: valorTareaId?.id)
-            
-            delegate?.editarTableViewController(self, didEditTarea: tareaId)
+            let tareaWithID = TareaWithID(tarea: tareaMod, id: tareaWithID?.id)
+            delegate?.editarTableViewController(self, didEditTarea: tareaWithID)
             dismiss(animated: true)
         }
         
@@ -82,11 +73,16 @@ class EditarTableViewController: UITableViewController {
     
     
     @IBAction func eliminarItemButton(_ sender: UIBarButtonItem) {
-        
-        delegate?.editarTableViewController(self, didDropTarea: valorTareaId?.id ?? "")
+        delegate?.editarTableViewController(self, didDropTarea: tareaWithID?.id)
         dismiss(animated: true)
         
-        
+    }
+    
+    
+    private func mostrarAlerta(titulo:String, mensaje : String){
+        let alert = UIAlertController(title: titulo, message:  mensaje, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cerrar", style: .cancel))
+        present(alert, animated: true)
     }
     
     

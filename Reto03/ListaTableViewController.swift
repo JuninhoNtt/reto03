@@ -54,8 +54,7 @@ class ListaTableViewController: UITableViewController {
         
         let nOrden = indexPath.row
         let tarea = listaTareas[nOrden]
-        let tareaId = TareaId(tarea: tarea, id: String(nOrden))
-        print("holaaaaa")
+        let tareaId = TareaWithID(tarea: tarea, id: nOrden)
         performSegue(withIdentifier: "segueDetalles", sender: tareaId)
     
        
@@ -70,13 +69,12 @@ class ListaTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("holaaaaa prepare")
-
         if let identifier=segue.identifier{
             
             switch identifier{
             case "segueDetalles" :
                 let destino=segue.destination as? EditarTableViewController
-                destino?.valorTareaId=sender as? TareaId
+                destino?.tareaWithID = sender as? TareaWithID
                 destino?.delegate = self
             case "agregarSegue" :
                 let destino=segue.destination as? CreateTableViewController
@@ -95,52 +93,32 @@ extension ListaTableViewController : CreateTableViewControllerDelegate {
     
     
     func createTableViewController(_ createTableViewController: CreateTableViewController, didCreateTarea newTarea: Tarea) {
-        print("crear datos")
         listaTareas.append(newTarea)
         tableView.reloadData()
     }
 }
 
 extension ListaTableViewController : EditarTableViewControllerDelegate {
-    func editarTableViewController(_ editarTableViewController: EditarTableViewController, didDropTarea id: String?) {
+    func editarTableViewController(_ editarTableViewController: EditarTableViewController, didDropTarea id: Int?) {
         
-       
-        if let id = id, !id.isEmpty {
-            
-        let id = Int(id)
-            
           if let id = id {
-              
              listaTareas.remove(at: id)
               tableView.reloadData()
-         
            }
-
-        }
     }
     
     
     
-    func editarTableViewController(_ editarTableViewController: EditarTableViewController, didEditTarea tareaId: TareaId) {
-        
-        let id = tareaId.id
-        
-        if let id = id, !id.isEmpty {
-            
-            let id = Int(id)
-            
-            if let id = id {
+    func editarTableViewController(_ editarTableViewController: EditarTableViewController, didEditTarea tareaWithID: TareaWithID) {
+        let id = tareaWithID.id
+        if let id = id {
                 
-                listaTareas[id].titulo = tareaId.tarea.titulo
-                listaTareas[id].descripcion = tareaId.tarea.descripcion
-                listaTareas[id].prioridades = tareaId.tarea.prioridades
-
+                listaTareas[id].titulo = tareaWithID.tarea.titulo
+                listaTareas[id].descripcion = tareaWithID.tarea.descripcion
+                listaTareas[id].prioridades = tareaWithID.tarea.prioridades
                 tableView.reloadData()
             }
-            
-        
-        }
-        
+   
         
     }
 }

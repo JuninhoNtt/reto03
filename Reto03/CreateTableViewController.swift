@@ -43,9 +43,7 @@ class CreateTableViewController: UITableViewController {
     }
     
     @IBAction func guardarButtonItem(_ sender: UIBarButtonItem) {
-        
-
-        
+    
         var ti = tituloTextField.text ?? ""
         var des = descriTextField.text ?? ""
         var prio = prioridadTextField.text ?? ""
@@ -57,20 +55,41 @@ class CreateTableViewController: UITableViewController {
 
     
         if ti.isEmpty || des.isEmpty || prio.isEmpty {
-            print("campos vacios")
-            dismiss(animated: true)
-        
+            alertaSimple(titulo: "Error", mensaje: "tienes campos vacios")
         } else {
-            
             let tarea = Tarea(titulo: ti , descripcion: des, prioridades:prio)
-            delegate?.createTableViewController(self, didCreateTarea: tarea)
-            dismiss(animated: true)
-
+            alertaAccion(titulo: "Crear Tarea", mensaje: "estas seguro de crear esta tarea?", tarea: tarea)
+         
         }
         
        
 
         }
+    
+    private func alertaSimple(titulo:String, mensaje : String){
+        let alert = UIAlertController(title: titulo, message:  mensaje, preferredStyle: .alert)
+        alert.view.subviews.first?.subviews.first?.backgroundColor = UIColor.white
+        alert.addAction(UIAlertAction(title: "Cerrar", style: .cancel))
+        present(alert, animated: true)
+    }
+    
+    private func alertaAccion(titulo:String, mensaje : String, tarea :Tarea){
+        let alert = UIAlertController(title: titulo, message:  mensaje, preferredStyle: .alert)
+        alert.view.subviews.first?.subviews.first?.backgroundColor = UIColor.white
+        alert.addAction(UIAlertAction(title: "Cerrar", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+            self.crearItem(tarea: tarea)
+        }))
+        present(alert, animated: true)
+    }
+    
+    private func crearItem(tarea : Tarea){
+        
+        delegate?.createTableViewController(self, didCreateTarea: tarea)
+        dismiss(animated: true)
+        
+    }
+    
         
     
 }

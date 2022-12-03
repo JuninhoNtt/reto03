@@ -15,7 +15,7 @@ struct Tarea{
     
 }
 
-struct TareaId{
+struct TareaWithID {
     let tarea:Tarea
-    let id:String?
+    let id:Int?
 }
