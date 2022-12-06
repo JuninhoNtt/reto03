@@ -14,27 +14,23 @@ protocol CreateTableViewControllerDelegate{
 
 class CreateTableViewController: UITableViewController {
 
-    @IBOutlet var itemsTablaView: UITableView!
-    
-    
-    @IBOutlet weak var tituloTextField: UITextField!
-    
-    @IBOutlet weak var descriTextField: UITextField!
-    
-    @IBOutlet weak var prioridadTextField: UITextField!
+    @IBOutlet private weak var tituloTextField: UITextField!
+    @IBOutlet private weak var descriTextField: UITextField!
+    @IBOutlet private weak var prioridadTextField: UITextField!
     
     var delegate:CreateTableViewControllerDelegate?
 
-    
         override func viewDidLoad() {
         super.viewDidLoad()
-        
+        placeHolderField()
+       
+     
+    }
+    
+    private func placeHolderField(){
         tituloTextField.placeholder = "Ingrese titulo "
         descriTextField.placeholder = "Ingrese Descripcion"
         prioridadTextField.placeholder = "Ingrese Prioridad"
-        itemsTablaView.backgroundColor = UIColor.blue
-            
-    
     }
 
    
@@ -44,27 +40,23 @@ class CreateTableViewController: UITableViewController {
     
     @IBAction func guardarButtonItem(_ sender: UIBarButtonItem) {
     
-        var ti = tituloTextField.text ?? ""
-        var des = descriTextField.text ?? ""
-        var prio = prioridadTextField.text ?? ""
+        var titulo = tituloTextField.text ?? ""
+        var descripcion = descriTextField.text ?? ""
+        var prioridad = prioridadTextField.text ?? ""
         
-        
-        ti = ti.trimmingCharacters(in: .whitespacesAndNewlines)
-        des = des.trimmingCharacters(in: .whitespacesAndNewlines)
-        prio = prio.trimmingCharacters(in: .whitespacesAndNewlines)
+        titulo = titulo.trimmingCharacters(in: .whitespacesAndNewlines)
+        descripcion = descripcion.trimmingCharacters(in: .whitespacesAndNewlines)
+        prioridad = prioridad.trimmingCharacters(in: .whitespacesAndNewlines)
 
-    
-        if ti.isEmpty || des.isEmpty || prio.isEmpty {
+        if titulo.isEmpty || descripcion.isEmpty || prioridad.isEmpty {
             alertaSimple(titulo: "Error", mensaje: "tienes campos vacios")
         } else {
-            let tarea = Tarea(titulo: ti , descripcion: des, prioridades:prio)
+            let tarea = Tarea(titulo: titulo , descripcion: descripcion, prioridades:prioridad)
             alertaAccion(titulo: "Crear Tarea", mensaje: "estas seguro de crear esta tarea?", tarea: tarea)
-         
+            
         }
-        
-       
-
-        }
+  }
+  
     
     private func alertaSimple(titulo:String, mensaje : String){
         let alert = UIAlertController(title: titulo, message:  mensaje, preferredStyle: .alert)
@@ -84,10 +76,8 @@ class CreateTableViewController: UITableViewController {
     }
     
     private func crearItem(tarea : Tarea){
-        
         delegate?.createTableViewController(self, didCreateTarea: tarea)
         dismiss(animated: true)
-        
     }
     
         

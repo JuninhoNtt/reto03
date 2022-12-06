@@ -9,12 +9,10 @@ import UIKit
 
 class celdaTableViewCell: UITableViewCell {
     
-    
-    @IBOutlet weak var nombre: celdaTableViewCell!
-    
-    @IBOutlet weak var nom: UILabel!
-    @IBOutlet weak var des: UILabel!
-    @IBOutlet weak var prio: UILabel!
+   
+    @IBOutlet private weak var nombreLabel: UILabel!
+    @IBOutlet private weak var descriLabel: UILabel!
+    @IBOutlet private weak var prioridadLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,8 +21,14 @@ class celdaTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
+    }
+    
+    func setup(tarea: Tarea){
+        nombreLabel.text = tarea.titulo
+        descriLabel.text = tarea.descripcion
+        prioridadLabel.text = tarea.prioridades
+
     }
 
 }

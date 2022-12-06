@@ -9,19 +9,14 @@ import UIKit
 
 class ListaTableViewController: UITableViewController {
     
-    var listaTareas = [Tarea]()
-    let Tarea1 = Tarea(titulo: "ordenar", descripcion: "ayudar en casa", prioridades: "alta")
-    let Tarea2 = Tarea(titulo: "estudiar", descripcion: "estudiar ntt data", prioridades: "alta")
-    let Tarea3 = Tarea(titulo: "comer", descripcion:"comer hora almuerzo", prioridades: "baja")
-    
+    var listaTareas = [
+                       Tarea(titulo: "ordenar", descripcion: "ayudar en casa", prioridades: "alta"),
+                       Tarea(titulo: "estudiar", descripcion: "estudiar ntt data", prioridades: "alta"),
+                       Tarea(titulo: "comer", descripcion:"comer hora almuerzo", prioridades: "baja")]
+   
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listaTareas.append(Tarea1)
-        listaTareas.append(Tarea2)
-        listaTareas.append(Tarea3)
-        
-     
     }
 
     @IBAction func agregarItemButton(_ sender: UIBarButtonItem) {
@@ -42,16 +37,11 @@ class ListaTableViewController: UITableViewController {
   
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as? celdaTableViewCell
-       
-        cell?.nom.text  = listaTareas [indexPath.row].titulo
-        cell?.des.text  = listaTareas [indexPath.row].descripcion
-        cell?.prio.text  = listaTareas [indexPath.row].prioridades
-
+        cell?.setup(tarea: listaTareas[indexPath.row])
         return cell ?? UITableViewCell()
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let nOrden = indexPath.row
         let tarea = listaTareas[nOrden]
         let tareaId = TareaWithID(tarea: tarea, id: nOrden)
@@ -60,17 +50,12 @@ class ListaTableViewController: UITableViewController {
        
     }
     
-   
-    
-
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("holaaaaa prepare")
+        
         if let identifier=segue.identifier{
-            
             switch identifier{
             case "segueDetalles" :
                 let destino=segue.destination as? EditarTableViewController
@@ -112,7 +97,6 @@ extension ListaTableViewController : EditarTableViewControllerDelegate {
     func editarTableViewController(_ editarTableViewController: EditarTableViewController, didEditTarea tareaWithID: TareaWithID) {
         let id = tareaWithID.id
         if let id = id {
-                
                 listaTareas[id].titulo = tareaWithID.tarea.titulo
                 listaTareas[id].descripcion = tareaWithID.tarea.descripcion
                 listaTareas[id].prioridades = tareaWithID.tarea.prioridades
